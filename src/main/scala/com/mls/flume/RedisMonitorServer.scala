@@ -81,7 +81,7 @@ class RedisMonitorServer extends MonitorService {
               //设置新值
               valMap.put(flume_key, newValue)
 
-              logger.info(s"oldValue[${oldValue}],newValue[${newValue}]")
+              logger.info(s"${flume_key}--oldValue[${oldValue}],newValue[${newValue}]")
 
               logger.debug("增量[" + flume_key + "]:[" + time_num + "]")
             } else if ("ChannelSize".equals(attribute_key)) {
