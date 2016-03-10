@@ -59,7 +59,7 @@ object TimeProcess {
               val oldValue = valMap.getOrElse(flume_key, 0L)
               //发送给redis
               val time_num = newValue - oldValue
-              redis.rpush(redis_time_key, JSONObject(Map("host"->hostName,"count"->time_num.toString)).toString())
+              redis.hset(redis_time_key,hostName,time_num.toString)
               //本地缓存的值
               valMap.put(flume_key, newValue)
               //打印日志
