@@ -76,7 +76,7 @@ class RedisMonitorServer extends MonitorService {
               //时间戳key
               val redis_key = s"${time}::${hostName}::${flume_key}"
               val time_num = newValue - oldValue
-              redis.set(redis_key, time_num.asInstanceOf[String], "NX", "EX", 900)
+              redis.set(redis_key, time_num.toString, "NX", "EX", 900)
 
               //设置新值
               valMap.put(flume_key, newValue)
