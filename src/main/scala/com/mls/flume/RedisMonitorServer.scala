@@ -17,7 +17,7 @@ class RedisMonitorServer extends MonitorService {
   //redis库
   var redisDB: Int = _
   //定时器
-  val timer = new RecurringTimer(new SystemClock, 5 * 60 * 1000, TimeProcess.withRedis(redisHost, redisPort, redisDB), "RedisMonitorServer")
+  val timer = new RecurringTimer(new SystemClock, 5 * 60 * 1000, TimeProcess.withRedis(redisHost, redisPort, redisDB)_, "RedisMonitorServer")
 
   //重写
   override def start(): Unit = {
