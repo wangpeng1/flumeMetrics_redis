@@ -8,8 +8,6 @@ import org.apache.flume.instrumentation.util.JMXPollUtil
 import org.slf4j.LoggerFactory
 import redis.clients.jedis.Jedis
 
-import scala.util.parsing.json.JSONObject
-
 /**
   * Created by zhangzhikuan on 16/3/10.
   */
@@ -59,7 +57,7 @@ object TimeProcess {
               val oldValue = valMap.getOrElse(flume_key, 0L)
               //发送给redis
               val time_num = newValue - oldValue
-              redis.hset(redis_time_key,hostName,time_num.toString)
+              redis.hset(redis_time_key, hostName, time_num.toString)
               //本地缓存的值
               valMap.put(flume_key, newValue)
               //打印日志
@@ -70,12 +68,13 @@ object TimeProcess {
           }
         }
       }
+    } catch {
+      case t: Throwable => logger.error("未知错误", t);
+    } finally {
       //判断redis是否为空,如果不为空,则关闭
       if (redis != null) {
         redis.close()
       }
-    } catch {
-      case t: Throwable => logger.error("未知错误", t);
     }
   }
 }
