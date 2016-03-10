@@ -61,7 +61,7 @@ object TimeProcess {
               //本地缓存的值
               valMap.put(flume_key, newValue)
               //打印日志
-              logger.info(s"${redis_time_key}--oldValue[${oldValue}],newValue[${newValue}]增量[${time_num}]")
+              logger.warn(s"${redis_time_key}--oldValue[${oldValue}],newValue[${newValue}]增量[${time_num}]")
             }
           } catch {
             case e: Exception => logger.warn(s"Metric:Component[${component_key}]-Attribute[${attribute_key}]收集失败", e);
