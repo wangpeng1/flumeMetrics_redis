@@ -47,7 +47,7 @@ object TimeProcess {
         while (it$.hasNext) {
           val attribute_key = it$.next
           //组件+属性=>value
-          val flume_key = "${component_key}.${attribute_key}"
+          val flume_key = "s${component_key}.${attribute_key}"
           //发送redis的key
           val redis_time_key = s"${timeStr}::${flume_key}"
           //开始往redis写数据
