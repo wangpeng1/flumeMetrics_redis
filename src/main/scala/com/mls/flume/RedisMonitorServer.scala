@@ -28,7 +28,7 @@ class RedisMonitorServer extends MonitorService {
     //sink成功读取的事件的总数量
     "EventTakeSuccessCount",
     //目前channel中事件的总数量
-    "ChannelSize",
+    //    "ChannelSize",
 
     //目前为止source已经接收到的事件总数量
     "EventReceivedCount",
@@ -62,7 +62,7 @@ class RedisMonitorServer extends MonitorService {
           val attribute_key = it$.next
           //属性,组件+属性=>value
           val flume_key = s"flume.${component_key}.${attribute_key}"
-
+          val redis_key = s"${time}::${hostName}::${flume_key}"
 
           //开始往redis写数据
           try {
@@ -74,13 +74,19 @@ class RedisMonitorServer extends MonitorService {
 
               //发送给redis
               //时间戳key
-              val redis_key = s"${time}::${hostName}::${flume_key}"
+
               val time_num = newValue - oldValue
               redis.set(redis_key, time_num.toString, "NX", "EX", 900)
 
               //设置新值
               valMap.put(flume_key, newValue)
+
+              logger.info(s"oldValue[${oldValue}],newValue[${newValue}]")
+
               logger.debug("增量[" + flume_key + "]:[" + time_num + "]")
+            } else if ("ChannelSize".equals(attribute_key)) {
+              //记录当前channel的大小
+              redis.set(redis_key, attributeMap.get(attribute_key), "NX", "EX", 900)
             }
 
           } catch {
