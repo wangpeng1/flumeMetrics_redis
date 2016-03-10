@@ -10,16 +10,9 @@ import org.slf4j.LoggerFactory
 class RedisMonitorServer extends MonitorService {
   //打印日志
   val logger = LoggerFactory.getLogger(classOf[RedisMonitorServer])
-  //redis地址,域名
-  var redisHost: String = _
-  //redis端口
-  var redisPort: Int = _
-  //redis库
-  var redisDB: Int = _
   //定时器
-  val timer = new RecurringTimer(new SystemClock, 1 * 60 * 1000, TimeProcess.withRedis(redisHost, redisPort, redisDB)_, "RedisMonitorServer")
+  var timer: RecurringTimer = _
 
-  //重写
   override def start(): Unit = {
     //清零,其实如果可以做到持久化会不会好点呢
     //定时器重启
@@ -36,8 +29,10 @@ class RedisMonitorServer extends MonitorService {
   }
 
   override def configure(context: Context): Unit = {
-    redisHost = context.getString("ip", "127.0.0.1")
-    redisPort = context.getInteger("port", 6379)
-    redisDB = context.getInteger("db", 0)
+    val redisHost = context.getString("ip", "127.0.0.1")
+    val redisPort = context.getInteger("port", 6379)
+    val redisDB = context.getInteger("db", 0)
+    //定时器
+    timer = new RecurringTimer(new SystemClock, 1 * 60 * 1000, TimeProcess.withRedis(redisHost, redisPort, redisDB), "RedisMonitorServer")
   }
 }
