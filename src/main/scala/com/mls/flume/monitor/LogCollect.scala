@@ -12,7 +12,7 @@ import redis.clients.jedis.Jedis
 /**
   * Created by zhangzhikuan on 16/3/11.
   */
-object App {
+object LogCollect {
   //打印日志
   val logger = LoggerFactory.getLogger("FlumeMonitor")
   //时间模版
