@@ -18,7 +18,7 @@ object LogCollect {
   def withRedis(redisHost: String, redisPort: Int, redisDB: Int)(time: Long): Unit = {
 
     //等待这么时间主要是为了保证所有的agent数据都已经入到redis中, 这里等待1分半
-    Thread.sleep(90 * 1000)
+    Thread.sleep(20 * 1000)
 
     //redis客户端
     val redis = new Jedis(redisHost,redisPort)
@@ -47,7 +47,7 @@ object LogCollect {
   def main(args: Array[String]) {
     //redis的配置项
     val Array(redisHost, redisPort, redisDB) = args
-    val timer = new RecurringTimer(new SystemClock, 5 * 60 * 1000, withRedis(redisHost, redisPort.toInt, redisDB.toInt), "logCollect")
+    val timer = new RecurringTimer(new SystemClock, 1 * 60 * 1000, withRedis(redisHost, redisPort.toInt, redisDB.toInt), "logCollect")
     timer.start()
     Waiter.waitForStopOrError()
   }
