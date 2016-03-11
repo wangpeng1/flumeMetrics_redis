@@ -46,8 +46,6 @@ object TimeProcess {
           val attribute_key = it$.next
           //组件+属性=>value
           val flume_key = s"${component_key}.${attribute_key}"
-          //发送redis的key
-          val redis_time_key = s"${timeStr}::${flume_key}"
           //开始往redis写数据
           try {
             if (attributeList.contains(attribute_key)) {
@@ -56,12 +54,12 @@ object TimeProcess {
               //获取原有的值
               val oldValue = valMap.getOrElse(flume_key, 0L)
               //发送给redis
-              val time_num = newValue - oldValue
-              redis.hset(redis_time_key, hostName, time_num.toString)
+              val time_number = newValue - oldValue
+              redis.hset(timeStr, s"${hostName}.${flume_key}", time_number.toString)
               //本地缓存的值
               valMap.put(flume_key, newValue)
               //打印日志
-              logger.warn(s"${redis_time_key}--oldValue[${oldValue}],newValue[${newValue}]增量[${time_num}]")
+              logger.warn(s"${timeStr}.${attribute_key}--oldValue[${oldValue}],newValue[${newValue}]增量[${time_number}]")
             }
           } catch {
             case e: Exception => logger.warn(s"Metric:Component[${component_key}]-Attribute[${attribute_key}]收集失败", e);
