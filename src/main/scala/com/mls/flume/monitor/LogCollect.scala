@@ -24,9 +24,11 @@ object LogCollect {
     val redis = new Jedis(redisHost,redisPort)
     redis.select(redisDB) //选择redis库
 
+    val timeStr = Constants.date2String(time)
+
     val resultMap = collection.mutable.Map[String, Long]()
     try {
-      val allMap: java.util.Map[String, String] = redis.hgetAll(Constants.date2String(time))
+      val allMap: java.util.Map[String, String] = redis.hgetAll(timeStr)
       val it = allMap.keySet().iterator()
       while (it.hasNext) {
         val oldKey = it.next()
@@ -38,7 +40,7 @@ object LogCollect {
     } finally {
       redis.close()
     }
-    println( s"""输出结果$resultMap""")
+    println( s"""${timeStr}-输出结果$resultMap""")
 
   }
 
