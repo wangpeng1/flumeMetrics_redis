@@ -1,4 +1,4 @@
-package com.mls.flume
+package com.mls.flume.time
 
 import org.slf4j.LoggerFactory
 

@@ -1,5 +1,6 @@
 package com.mls.flume
 
+import com.mls.flume.time.{SystemClock, RecurringTimer}
 import org.apache.flume.Context
 import org.apache.flume.instrumentation.MonitorService
 import org.slf4j.LoggerFactory

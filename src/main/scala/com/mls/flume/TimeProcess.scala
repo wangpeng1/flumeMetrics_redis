@@ -4,6 +4,7 @@ import java.net.InetAddress
 import java.text.SimpleDateFormat
 import java.util.Date
 
+import com.mls.flume.util.Constants
 import org.apache.flume.instrumentation.util.JMXPollUtil
 import org.slf4j.LoggerFactory
 import redis.clients.jedis.Jedis
@@ -55,14 +56,14 @@ object TimeProcess {
               val oldValue = valMap.getOrElse(flume_key, 0L)
               //发送给redis
               val time_number = newValue - oldValue
-              redis.hset(timeStr, s"${hostName}.${flume_key}", time_number.toString)
+              redis.hset(timeStr, s"${hostName}${Constants.TOPIC_SPLIT}${flume_key}", time_number.toString)
               //本地缓存的值
               valMap.put(flume_key, newValue)
               //打印日志
-              logger.warn(s"${timeStr}.${attribute_key}--oldValue[${oldValue}],newValue[${newValue}]增量[${time_number}]")
+              logger.warn(s"${timeStr}.${flume_key}--oldValue[${oldValue}],newValue[${newValue}]增量[${time_number}]")
             }
           } catch {
-            case e: Exception => logger.warn(s"Metric:Component[${component_key}]-Attribute[${attribute_key}]收集失败", e);
+            case e: Exception => logger.warn(s"Metric:[${flume_key}]收集失败", e);
           }
         }
       }
