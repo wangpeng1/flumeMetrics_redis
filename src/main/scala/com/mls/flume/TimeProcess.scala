@@ -1,8 +1,6 @@
 package com.mls.flume
 
 import java.net.InetAddress
-import java.text.SimpleDateFormat
-import java.util.Date
 
 import com.mls.flume.util.Constants
 import org.apache.flume.instrumentation.util.JMXPollUtil
@@ -17,8 +15,6 @@ object TimeProcess {
   val logger = LoggerFactory.getLogger(classOf[RedisMonitorServer])
   //待收集的选项--sink:成功写出到存储的事件总数量
   val attributeList = List("EventDrainSuccessCount")
-  //时间格式
-  val df = new SimpleDateFormat("yyyyMMddHHmm")
   //保存历史记录的存储
   val valMap = collection.mutable.Map[String, Long]()
   //机器主机名
@@ -31,7 +27,7 @@ object TimeProcess {
     redis.select(redisDB) //选择redis库
 
     //时间戳
-    val timeStr = df.format(new Date(time))
+    val timeStr = Constants.date2String(time)
     try {
       //获取所有的信息
       val t: java.util.Map[String, java.util.Map[String, String]] = JMXPollUtil.getAllMBeans
