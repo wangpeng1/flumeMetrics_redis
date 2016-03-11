@@ -15,13 +15,15 @@ object LogCollect {
 
 
   //执行函数
-  def withRedis(redisHost: String, redisPort: Int, db: Int)(time: Long): Unit = {
+  def withRedis(redisHost: String, redisPort: Int, redisDB: Int)(time: Long): Unit = {
 
     //等待这么时间主要是为了保证所有的agent数据都已经入到redis中, 这里等待1分半
     Thread.sleep(90 * 1000)
 
     //redis客户端
-    val redis = new Jedis()
+    val redis = new Jedis(redisHost,redisPort)
+    redis.select(redisDB) //选择redis库
+
     val resultMap = collection.mutable.Map[String, Long]()
     try {
       val allMap: java.util.Map[String, String] = redis.hgetAll(Constants.date2String(time))
