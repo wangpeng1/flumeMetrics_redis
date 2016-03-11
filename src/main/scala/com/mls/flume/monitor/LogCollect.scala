@@ -38,7 +38,7 @@ object LogCollect {
     } finally {
       redis.close()
     }
-    logger.warn( s"""输出结果$resultMap""")
+    println( s"""输出结果$resultMap""")
 
   }
 
