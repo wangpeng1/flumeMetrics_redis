@@ -5,6 +5,8 @@ import com.mls.flume.util.Constants
 import org.slf4j.LoggerFactory
 import redis.clients.jedis.Jedis
 
+import java.util.{Map => JMap}
+
 
 /**
   * Created by zhangzhikuan on 16/3/11.
@@ -17,7 +19,7 @@ object LogCollect {
   //执行函数
   def withRedis(redisHost: String, redisPort: Int, redisDB: Int)(time: Long): Unit = {
 
-    //等待这么时间主要是为了保证所有的agent数据都已经入到redis中, 这里等待1分半
+    //等待这么时间主要是为了保证所有的agent数据都已经入到redis中
     Thread.sleep(20 * 1000)
 
     //redis客户端
@@ -28,7 +30,7 @@ object LogCollect {
 
     val resultMap = collection.mutable.Map[String, Long]()
     try {
-      val allMap: java.util.Map[String, String] = redis.hgetAll(timeStr)
+      val allMap: JMap[String, String] = redis.hgetAll(timeStr)
       val it = allMap.keySet().iterator()
       while (it.hasNext) {
         val oldKey = it.next()
