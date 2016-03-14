@@ -85,7 +85,7 @@ object TimeProcess {
         //本地缓存的值
         valMap.put(flume_key, newValue)
         //打印日志
-        logger.warn("%s.%s:OldValue[%d]-NewValue[%d]-增量[%d]".format(timeStr, flume_key, oldValue, newValue, time_number))
+        logger.warn("%s.%s:OldValue[%d] - NewValue[%d] - 增量[%d]".format(timeStr, flume_key, oldValue, newValue, time_number))
       }
     } catch {
       case e: Exception => logger.warn("Metric:[%s.%s:%s]发送redis失败".format(component_key, attribute_key, attribute_value), e);
