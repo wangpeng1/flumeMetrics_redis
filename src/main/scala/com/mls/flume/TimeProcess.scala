@@ -1,6 +1,7 @@
 package com.mls.flume
 
 import java.net.InetAddress
+import java.util.{Map => JMap}
 
 import com.mls.flume.util.Constants
 import org.apache.flume.instrumentation.util.JMXPollUtil
@@ -35,13 +36,13 @@ object TimeProcess {
     val timeStr = Constants.date2String(time)
     try {
       //获取所有的信息
-      val allMBeans: java.util.Map[String, java.util.Map[String, String]] = JMXPollUtil.getAllMBeans
+      val allMBeans: JMap[String, JMap[String, String]] = JMXPollUtil.getAllMBeans
       val it = allMBeans.keySet.iterator
       //开始遍历
       while (it.hasNext) {
         val component_key = it.next
         //组件也是一个map
-        val attributeMap: java.util.Map[String, String] = allMBeans.get(component_key)
+        val attributeMap: JMap[String, String] = allMBeans.get(component_key)
         //进行迭代
         val it$ = attributeMap.keySet().iterator()
         while (it$.hasNext) {
@@ -73,21 +74,21 @@ object TimeProcess {
       //判断是否需要收集
       if (attributeList.contains(attribute_key)) {
         //组件+属性=>value
-        val flume_key = s"${component_key}.${attribute_key}"
+        val flume_key = "%s.%s".format(component_key, attribute_key)
         //value值
         val newValue = attribute_value.toLong
         //获取原有的值
         val oldValue = valMap.getOrElse(flume_key, 0L)
         //发送给redis
         val time_number = newValue - oldValue
-        redis.hset(timeStr, s"${hostName}${Constants.TOPIC_SPLIT}${flume_key}", time_number.toString)
+        redis.hset(timeStr, "%s%s%s".format(hostName, Constants.TOPIC_SPLIT, flume_key), time_number.toString)
         //本地缓存的值
         valMap.put(flume_key, newValue)
         //打印日志
-        logger.warn(s"${timeStr}.${flume_key}--oldValue[${oldValue}],newValue[${newValue}]增量[${time_number}]")
+        logger.warn("%s.%s:OldValue[%d]-NewValue[%d]-增量[%d]".format(timeStr, flume_key, oldValue, newValue, time_number))
       }
     } catch {
-      case e: Exception => logger.warn(s"Metric:[${component_key}.${attribute_key}:${attribute_value}]发送到redis失败", e);
+      case e: Exception => logger.warn("Metric:[%s.%s:%s]发送redis失败".format(component_key, attribute_key, attribute_value), e);
     }
 
   }
