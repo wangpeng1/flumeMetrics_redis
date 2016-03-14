@@ -1,3 +1,5 @@
+package com.mls.flume
+
 import java.net.InetAddress
 
 import com.mls.flume.util.Constants
@@ -14,7 +16,7 @@ object TimeProcess {
   //待收集的选项--sink:成功写出到存储的事件总数量
   private val attributeList = List("EventDrainSuccessCount")
   //保存历史记录的存储
-  private val valMap = collection.mutable.Map[String, Long]()
+  val valMap = collection.mutable.Map[String, Long]()
   //机器主机名
   private val hostName: String = InetAddress.getLocalHost.getHostName
 

@@ -1,6 +1,6 @@
 package com.mls.flume
 
-import com.mls.flume.time.{SystemClock, RecurringTimer}
+import com.mls.flume.time.{RecurringTimer, SystemClock}
 import org.apache.flume.Context
 import org.apache.flume.instrumentation.MonitorService
 import org.slf4j.LoggerFactory
@@ -15,8 +15,10 @@ class RedisMonitorServer extends MonitorService {
   var timer: RecurringTimer = _
 
   override def start(): Unit = {
-    //清零,其实如果可以做到持久化会不会好点呢
+    //清零,
+    //持久化会不会更好点呢?
     //定时器重启
+
     TimeProcess.valMap.clear()
     //定时器关闭
     timer.start()
