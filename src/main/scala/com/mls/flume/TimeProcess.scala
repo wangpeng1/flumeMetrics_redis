@@ -12,7 +12,7 @@ import redis.clients.jedis.Jedis
   */
 object TimeProcess {
   //打印日志
-  private val logger = LoggerFactory.getLogger("RedisMonitorServer")
+  private val logger = LoggerFactory.getLogger("Redis-Monitor-TimeProcess")
   //待收集的选项--sink:成功写出到存储的事件总数量
   private val attributeList = List("EventDrainSuccessCount")
   //保存历史记录的存储

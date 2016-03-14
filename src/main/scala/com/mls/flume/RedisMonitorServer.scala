@@ -13,12 +13,10 @@ class RedisMonitorServer extends MonitorService {
   val logger = LoggerFactory.getLogger(classOf[RedisMonitorServer])
   //定时器
   var timer: RecurringTimer = _
-
   override def start(): Unit = {
     //清零,
     //持久化会不会更好点呢?
     //定时器重启
-
     TimeProcess.valMap.clear()
     //定时器关闭
     timer.start()
