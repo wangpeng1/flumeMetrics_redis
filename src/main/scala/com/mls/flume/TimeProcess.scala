@@ -21,7 +21,7 @@ object TimeProcess {
   private val hostName: String = InetAddress.getLocalHost.getHostName
 
   /**
-    * 定时逻辑
+    * 定时逻辑, 此处每次定时任务都要重新生成reids实例,方便切换redis地址,redis地址最好要用域名
     * @param redisHost redis的主机名
     * @param redisPort redis的端口
     * @param redisDB redis的数据库
